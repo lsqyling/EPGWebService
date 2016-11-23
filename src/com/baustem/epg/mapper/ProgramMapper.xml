@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baustem.epg.mapper.ProgramMapper">
+
+	<sql id="condition">
+		<where>
+			<if test="logicalNumber!=null and logicalNumber!=''">
+				and logicalNumber = #{logicalNumber}
+			</if>
+			<if test="channelName!=null and channelName!=''">
+				and name = #{channelName}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getByLogicalNAndChannelN" resultType="com.baustem.xmlservice.entity.Program">
+		SELECT ONID,TSID,SID,logicalNumber,`name`
+		FROM ProgramList
+		<include refid="condition"></include>
+	</select>
+	
+	<select id="getProgramByEvent" resultType="com.baustem.xmlservice.entity.Program">
+		SELECT ONID,TSID,SID,logicalNumber,`name` 
+		FROM ProgramList
+		WHERE ONID=#{ONID} AND TSID=#{TSID} AND SID=#{SID}
+	</select>
+		
+</mapper>

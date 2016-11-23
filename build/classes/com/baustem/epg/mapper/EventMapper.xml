@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baustem.epg.mapper.EventMapper">
+
+	<sql id="condition">
+		<where>
+			<if test="startTime!=null and endTime!=null">
+				<![CDATA[
+					AND startTime >= #{startTime} AND endTime<=#{endTime}
+				]]>
+			</if>
+			<if test="ONID!=null">
+				AND ONID=#{ONID} AND TSID=#{TSID} AND SID=#{SID}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getList" resultType="com.baustem.xmlservice.entity.Event">
+		SELECT ONID,TSID,SID,startTime,endTime,eventName,playUrl,postUrl
+		FROM EPGList
+		<include refid="condition"></include>
+	</select>
+	
+	<select id="getEventsByName" resultType="com.baustem.xmlservice.entity.Event">
+		SELECT ONID,TSID,SID,startTime,endTime,eventName,playUrl,postUrl
+		FROM EPGList
+		<include refid="conditionByName"></include>
+	</select>
+	
+	<sql id="conditionByName">
+		<where>
+			<if test="likeProgramName!=null and likeProgramName!=''">
+				AND eventName LIKE #{likeProgramName}
+			</if>
+			<if test="startTime!=null and startTime!=''">
+				<![CDATA[
+				AND startTime >= #{startTime}
+				]]>
+			</if>
+			<if test="endTime!=null and endTime !=''">
+				<![CDATA[
+				AND endTime <= #{endTime}
+				]]>
+			</if>
+		</where>
+	
+	</sql>
+	
+	
+	
+	
+</mapper>
